@@ -108,9 +108,10 @@ namespace SeaBattle
 
     }
 
-    
+
     class Program
     {
+        public static  Random Random = new Random();
         public static ShipArray shipArray1 = new ShipArray();
         public static ShipArray shipArray2 = new ShipArray();
         public static int[,] field0 = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -126,7 +127,6 @@ namespace SeaBattle
 
         static void Main(string[] args)
         {
-            Random rand = new Random();
 
             int[,] field1 = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                               { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -150,47 +150,30 @@ namespace SeaBattle
                               { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                               { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }};
 
-            int x = rand.Next(1, 9);
-            int y = rand.Next(1, 9);
-            int x1 = rand.Next(1, 9);
-            int y1 = rand.Next(1, 9);
-            int x2 = rand.Next(1, 9);
-            int y2 = rand.Next(1, 9);
-            int x3 = rand.Next(1, 9);
-            int y3 = rand.Next(1, 9);
-            int x4 = rand.Next(1, 9);
-            int y4 = rand.Next(1, 9);
-            int x5 = rand.Next(1, 9);
-            int y5 = rand.Next(1, 9);
-            int x6 = rand.Next(1, 9);
-            int y6 = rand.Next(1, 9);
-            int x7 = rand.Next(1, 9);
-            int y7 = rand.Next(1, 9);
-            field2[y, x] = 10;
-            field2[y1, x1] = 10;
-            field2[y2, x2] = 10;
-            field2[y3, x3] = 10;
-            field2[y4, x4] = 10;
-            field2[y5, x5] = 10;
-            field2[y6, x6] = 10;
-            field2[y7, x7] = 10;
-
             bool game = true; // game loop
             bool preGame = true;
             string gameMode = "2p";
             int playerWin = 0;
             string answer;
-            string version = "0.5";
-            
+            string version = "0.6";
+
+            var basicConsoleForeGround = ConsoleColor.DarkCyan;
+            var basicConsoleBackGround = ConsoleColor.Black;
+
+
             while (game)
             {
+                Console.ForegroundColor = basicConsoleForeGround;
                 Console.Clear();
 
 
 
                 preGame = true;
                 playerWin = 0;
+
+                Console.ForegroundColor = ConsoleColor.Blue;
                 printNewSign(version);
+                Console.ForegroundColor = basicConsoleForeGround;
 
                 while (true)
                 {
@@ -206,6 +189,7 @@ namespace SeaBattle
                     }
                 }
 
+
                 while (preGame)
                 {
                     // Console.Write("2p or bot (2p/bot): ");
@@ -213,14 +197,6 @@ namespace SeaBattle
                     {
                         BuilderRandom(field1, 1);
                         BuilderRandom(field2, 2);
-                        field2[y, x] = 0;
-                        field2[y1, x1] = 0;
-                        field2[y2, x2] = 0;
-                        field2[y3, x3] = 0;
-                        field2[y4, x4] = 0;
-                        field2[y5, x5] = 0;
-                        field2[y6, x6] = 0;
-                        field2[y7, x7] = 0;
 
                         Console.Clear();
 
@@ -273,11 +249,24 @@ namespace SeaBattle
                                             {
                                                 if (Char.IsDigit(answer[1]))
                                                 {
-                                                    foreach (char c in symbols)
+                                                    if ( (int)Char.GetNumericValue(answer[1]) != 0 ) 
                                                     {
-                                                        if (answer[0] == c)
+                                                        foreach (char c in symbols)
                                                         {
-                                                            exitOrNot = true;
+                                                            if (answer[0] == c)
+                                                            {
+                                                                if ( answer.Length == 3 ) 
+                                                                {
+                                                                    if ( Char.IsDigit(answer[2]) && (int)Char.GetNumericValue(answer[2]) == 0 && (int)Char.GetNumericValue(answer[1]) == 1) 
+                                                                    {
+                                                                        exitOrNot = true;
+                                                                    }
+                                                                }
+                                                                else if ( answer.Length == 2 )
+                                                                {
+                                                                    exitOrNot = true;
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -348,11 +337,24 @@ namespace SeaBattle
                                             {
                                                 if (Char.IsDigit(answer[1]))
                                                 {
-                                                    foreach (char c in symbols)
+                                                    if ((int)Char.GetNumericValue(answer[1]) != 0)
                                                     {
-                                                        if (answer[0] == c)
+                                                        foreach (char c in symbols)
                                                         {
-                                                            exitOrNot = true;
+                                                            if (answer[0] == c)
+                                                            {
+                                                                if (answer.Length == 3)
+                                                                {
+                                                                    if (Char.IsDigit(answer[2]) && (int)Char.GetNumericValue(answer[2]) == 0 && (int)Char.GetNumericValue(answer[1]) == 1)
+                                                                    {
+                                                                        exitOrNot = true;
+                                                                    }
+                                                                }
+                                                                else if ( answer.Length == 2 )
+                                                                {
+                                                                    exitOrNot = true;
+                                                                }
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -437,18 +439,14 @@ namespace SeaBattle
                             } 
                             else
                             {
-                                preGame = false;
                                 break;
                             }
                         }
-                        break;
 
                     }
 
                 }
 
-                field1 = field0; 
-                field2 = field0;
                 Console.WriteLine("\n");
                 continue;
             }
@@ -636,24 +634,35 @@ namespace SeaBattle
                 }
             }
 
-            if ( field[y-1, x] == 8 ) {
-                field[y-1, x] = 2;
-                return false;
+            if ( y > 0 ) {
+                if (field[y - 1, x] == 8) {
+                    field[y - 1, x] = 2;
+                    return false;
+                }
+                else
+                {
+                    field[y - 1, x] = 1;
+                    return true;
+                }
             }
-            else
-            {
-                field[y-1, x] = 1;
-                return true;
-            }
+            return true;
         }
 
 
         static void BuilderRandom(int[,] field, int fieldNumber)
         {
-            Random rnd = new Random();
-            Random Random = new Random(rnd.Next(0, 10));
             int direction, x, y;
             bool canOrNot;
+
+            for ( int i = 0; i<=9; i++ )
+            {
+                for ( int j = 0; j <= 9; j++ )
+                {
+                    field[i, j] = 0;
+                }
+            }
+
+
 
             void PlaceShip(int shipLength)
             {
@@ -852,7 +861,6 @@ namespace SeaBattle
 
         static bool checkWin(int[,] field)
         {
-            int total = 20;
             int alive = 0;
             foreach ( int cell in field )
             {
@@ -887,11 +895,6 @@ namespace SeaBattle
             // |____|  |_|   \___|\__,_|\___  |\___||_|      \__/ \__/ |_|_| |_||___/ 
             //                           ___| |
             //                          |____/
-            //  ____                ____        _   _   _        
-            // / ___|  ___   __ _  | ,_ )  __ _| |_| |_| |   ___ 
-            // \___ \ / _ \ / _` | |  _ \ / _` |  _|  _| |  / _ \
-            //  ___) |  __/| (_| | | |_) | (_| | |_| |_| |_|  __/
-            // |____/ \___| \__,_| |____/ \__,_|\__|\__|\__|\___|
             if ( player == 1 )
             {
                 Console.WriteLine(" ___     ____  _                                         _");
@@ -917,12 +920,6 @@ namespace SeaBattle
 
         static void printNewSign( string version )
         {
-            //       _/_/_/
-            //    _/
-            //     _/_/    _/
-            //        _/  _/
-            // _/_/_/      _/
-
             //  ____                ____        _   _   _        
             // / ___|  ___   __ _  | ,_ )  __ _| |_| |_| |   ___ 
             // \___ \ / _ \ / _` | |  _ \ / _` |  _|  _| |  / _ \
@@ -941,20 +938,6 @@ namespace SeaBattle
         }
 
 
-        static void printSign()
-        {
-            Console.WriteLine("  ____  ____     _     ____   ");
-            Console.WriteLine("  |     |       / \\    |   \\  ");
-            Console.WriteLine("  |___  |___   |   |   |___/  ");
-            Console.WriteLine("     |  |      |___|   |   \\  ");
-            Console.WriteLine("  ___|  |___   |   |   |___/  ");
-        }
-
-        public static int map(int value, int fromLow, int fromHigh, int toLow, int toHigh)
-        {
-            return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
-        }
-
 
         static void ShowSpace(int[,] field, bool admin)
         {
@@ -966,43 +949,85 @@ namespace SeaBattle
             string showShip = "■";
             string hit = "0";
 
-            Console.WriteLine("A B C D E F G H I J ");
+            var shipColor = ConsoleColor.DarkCyan;
+            var basicColor = ConsoleColor.Black;
+            var continueColor = ConsoleColor.DarkCyan; // Console color after this function
+            var backColor = ConsoleColor.DarkCyan;
+            var black = ConsoleColor.Black;
+
+            Console.BackgroundColor = backColor;
+            Console.ForegroundColor = basicColor;
+            Console.WriteLine("A B C D E F G H I J   ");
+            
             countOfElements = 1;
             foreach (int square in field)
             {
                 if (true)
                 {
+                    Console.BackgroundColor = basicColor;
+                    Console.ForegroundColor = black;
                     switch (square)
                     {
                         case 0:
+                            Console.ForegroundColor = backColor;
                             Console.Write($"{empty} ");
                             break;
+
                         case -1:
+                            Console.ForegroundColor = backColor;
                             if (admin) { Console.Write($"{empty} "); }
                             else { Console.Write($"{empty} "); }
                             break;
+
                         case 1:
+                            Console.ForegroundColor = backColor;
                             Console.Write($"{hit} ");
                             break;
+
                         case 2:
+                            Console.ForegroundColor = shipColor;
                             Console.Write($"{hitShip} ");
                             break;
+
                         case 8:
-                            if (admin) { Console.Write($"{showShip} "); }
-                            else { Console.Write($"{empty} "); }
+                            if (admin) 
+                            {
+                                Console.ForegroundColor = shipColor;
+                                Console.Write($"{showShip} "); 
+                            }
+                            else 
+                            {
+                                Console.ForegroundColor = backColor;
+                                Console.Write($"{empty} "); 
+                            }
                             break;
+
                         case 10:
+                            Console.ForegroundColor = shipColor;
                             Console.Write($"{"&"} ");
                             break;
                     }
+
+                    Console.BackgroundColor = backColor;
+                    Console.ForegroundColor = basicColor;
                     if (countOfElements % 10 == 0 || countOfElements == 0)
                     {
-                        Console.WriteLine($"{countOfElements / 10} ");
+                        if ( countOfElements / 10 == 10 ) 
+                        {
+                            Console.WriteLine($"{countOfElements / 10}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{countOfElements / 10} ");
+                        }
                     }
                 }
                 countOfElements++;
             }
             // Console.WriteLine($"\n{countOfElements}");
+
+            Console.BackgroundColor = black;
+            Console.ForegroundColor = continueColor;
         }
     }
 }
